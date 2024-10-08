@@ -1,0 +1,33 @@
+RewriteEngine on
+
+RewriteRule ^view/([0-9]+)/$ index.php?page=viewpost&post_id=$1 [L]
+RewriteRule ^view/([0-9]+)$ index.php?page=viewpost&post_id=$1 [L]
+
+RewriteRule ^edit/([0-9]+)/$ index.php?page=editpost&post_id=$1 [L]
+RewriteRule ^edit/([0-9]+)$ index.php?page=editpost&post_id=$1 [L]
+
+RewriteRule ^del/([0-9]+)/$ index.php?page=editpost&post_id=$1&del=$1 [L]
+RewriteRule ^del/([0-9]+)/confirm/$ index.php?page=editpost&post_id=$1&del=$1&confirm=true [L]
+
+# กฎสำหรับ index.html ให้เรียกใช้ index.php พร้อม query string (ถ้ามี)
+RewriteCond %{QUERY_STRING} (.*)
+RewriteRule ^index\.html$ index.php?%1 [L]
+
+# กฎสำหรับหน้า index โดยตรง (http://localhost/) ให้เรียกใช้ index.php พร้อม query string
+RewriteCond %{QUERY_STRING} (.*)
+RewriteRule ^$ index.php?%1 [L]
+
+# กฎสำหรับทุก URL ที่ลงท้ายด้วย .html (รวมถึง query string)
+RewriteCond %{QUERY_STRING} (.*)
+RewriteRule ^([a-zA-Z0-9_-]+)\.html$ index.php?page=$1&%1 [L]
+
+# กฎเฉพาะสำหรับหน้า 404, success, register, login, member, forgotpassword
+RewriteRule ^404\.html$ index.php?page=404 [L]
+RewriteRule ^success\.html$ index.php?page=success [L]
+RewriteRule ^register\.html$ index.php?page=register [L]
+RewriteRule ^login\.html(.*)$ index.php?page=login&$1 [L]
+RewriteRule ^member\.html(.*)$ index.php?page=member&$1 [L]
+RewriteRule ^forgotpassword\.html(.*)$ index.php?page=forgot&$1 [L]
+
+# กำหนด ErrorDocument ให้ชี้ไปที่หน้าที่ต้องการเมื่อ 404
+ErrorDocument 404 /index.php?page=404
